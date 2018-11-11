@@ -18,7 +18,8 @@ function hash_edge(idx0, idx1) {
  * @param {int} used internally
  * @returns {(Vector[], float[])} path along one hemisphere of exterior, s-params of intersects involved in boundary
  */
-function find_exterior({path, s_xs_tree}, s_prev, s_next, dir = 1, s_first = -1, depth = 0) {
+function find_exterior(augmented_path, s_prev, s_next, dir = 1, s_first = -1, depth = 0) {
+	const {path, s_xs, s_xs_tree} = augmented_path;
 	// TODO assert: s_next !== s_prev
 	// reached the end or beginning; wherever s_xs_tree has no entry
 	if(s_next == null) {
@@ -60,7 +61,7 @@ function find_exterior({path, s_xs_tree}, s_prev, s_next, dir = 1, s_first = -1,
 	const [ret_path, ret_xs] = (() => {
 		// check for cycle
 		if(!s_xs.get(s_next).has(s_first))
-			 return find_exterior(path, argmin[0], s_xs_tree.at(argmin[1]).key, dir, s_first, depth + 1);
+			 return find_exterior(augmented_path, argmin[0], s_xs_tree.at(argmin[1]).key, dir, s_first, depth + 1);
 		else
 			return [[], []]; // BASE CASE: cycle
 	})();
@@ -122,7 +123,7 @@ export default function(path) {
 	}
 	
 	
-	const augmented_path = {path, s_xs_tree};
+	const augmented_path = {path, s_xs, s_xs_tree};
 	const boundaries = DIRS.map(dir => find_exterior(augmented_path, EPS, s_xs_tree.begin.key, dir));
 	const end_path = s_xs_tree.length === 0 ? path.slice(1) : path.slice(Math.floor(s_xs_tree.end.key) + 1);
 	for(const [bound_path, _] of boundaries)
@@ -164,7 +165,7 @@ export default function(path) {
 				for(const idx_adj of idx_adjs) {
 					if(!boundary_edge_set.has(hash_edge(idx_x, idx_adj)) && !update_inner_edges(idx_x, idx_adj, dir_idx)) {
 						const s0 = s_xs_tree.at(idx_x).key, s1 = s_xs_tree.at(idx_adj).key
-						const [poly, poly_xs] = find_exterior(s0, s1, DIRS[dir_idx], s0);
+						const [poly, poly_xs] = find_exterior(augmented_path, s0, s1, DIRS[dir_idx], s0);
 						polys.push(poly);
 						for(const [poly_s_x, poly_s_adj] of poly_xs) {
 							update_inner_edges(s_xs_tree.find(poly_s_x).index, s_xs_tree.find(poly_s_adj).index, dir_idx);

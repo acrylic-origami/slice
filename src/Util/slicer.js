@@ -16,7 +16,9 @@ export function replace_body(world, outgoing, incomings) {
 		
 		Composite.addBody(group, incoming);
 	}
-	Body.setStatic(argmax, true);
+	if(incomings.length > 0)
+		Body.setStatic(argmax, true);
+	
 	// note: we assume the incoming bodies are centered at 0 and unrotated
 	Composite.rotate(group, outgoing.angle, {x: 0, y: 0});
 	Composite.translate(group, outgoing.position);

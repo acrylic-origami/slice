@@ -27,12 +27,12 @@ window.addEventListener('load', e => {
 	const engine = Engine.create();
 	const starting_polys = [
 		[
-			{x: -50, y: -50 },
-			{x: 0, y: -25 },
-			{x: 50, y: -50 },
-			{x: 50, y: 50 },
-			{x: 0, y: 25 },
-			{x: -50, y: 50 }
+			{x: -120, y: -120 },
+			// {x: 0, y: -25 },
+			{x: 120, y: -120 },
+			{x: 120, y: 120 },
+			// {x: 0, y: 25 },
+			{x: -120, y: 120 }
 		]
 	];
 	const starting_bodies = starting_polys.map(poly => [Bodies.fromVertices(500, 0, poly), poly]);
@@ -78,7 +78,10 @@ window.addEventListener('load', e => {
 		// `generated_shells` stores the daughter body IDs. Generally we would need to also store the s-param of the exit, but here the exits always happen along edge (0,1) on the daughter
 		const generated_shells = new Set();
 		
-		for(const [id, body_meta] of body_metas) {
+		const body_metas_keys = Array.from(body_metas.keys());
+		for(let body_meta_idx = 0; body_meta_idx < body_metas.size; body_meta_idx++) {
+			const body_meta = body_metas.get(body_metas_keys[body_meta_idx]);
+			const id = body_metas_keys[body_meta_idx];
 			// TEMP for debugging, so I can preserve body_metas for inspection later
 			// TODO: patch memory leak from `body_metas`
 			if(Composite.get(engine.world, id, 'body') == null)
@@ -138,7 +141,7 @@ window.addEventListener('load', e => {
 						generated_shells.add(daughter_body.id);
 					}
 				}
-				// console.log('EXIT', body.id);
+				console.log('EXIT', body.id);
 				
 				// TODO: re-enable these deletes to patch memory leaks
 				// body_coord_collection.delete(body.id);
@@ -191,7 +194,7 @@ window.addEventListener('load', e => {
 				if(s_xs.length === 1 && point_in_poly(knife[1], body_coords)) {
 					// we need to check for point in poly of the destination to handle knife points right or very very close to the body edges, which could bounce off but register as an entrance, wrecking havoc later
 					// happened in testing surprisingly often...
-					// console.log('ENTER', body.id);
+					console.log('ENTER', body.id);
 					body_metas.set(
 						body.id,
 						{
@@ -260,7 +263,7 @@ window.addEventListener('load', e => {
 								
 								poly_defer.splice(0);
 								if(resident_poly_entrance != null && point_in_poly(knife[1], total_poly)) {
-									// console.log('ENTER', body.id);
+									console.log('ENTER', body.id);
 									body_metas.set(
 										poly_body.id,
 										{
