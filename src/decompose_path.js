@@ -13,7 +13,7 @@ function hash_edge(idx0, idx1) {
  * @param {{ path: Vector[], s_xs_tree: RBTree }}
  * @param {float}
  * @param {float}
- * @param {-1|1} switch to minimally { 1: clockwise, -1: anticlockwise } path at intersects
+ * @param {-1|1} switch to the closest path { 1: clockwise, -1: anticlockwise } at intersects
  * @param {float}
  * @param {int} used internally
  * @returns {(Vector[], float[])} path along one hemisphere of exterior, s-params of intersects involved in boundary
@@ -35,7 +35,7 @@ function find_exterior(augmented_path, s_prev, s_next, dir = 1, s_first = -1, de
 	// reference vector points backwards vs. our travelling direction (s_prev -> s_next)
 	const ref = Vector.normalise(Vector.mult(Vector.sub(path[s_ref_dV_low + 1], path[s_ref_dV_low]), s_prev - s_next));
 	for(const s_overlap of s_xs.get(s_next)) {
-		// used to have s_overlap !== s_next, but actually in an extreme degeneracy (where the intersection point is right on a draw point which doubles back) this might be a necessary case
+		// used to have s_overlap !== s_next, but actually in an extreme corner case (where the intersection point is right on a draw point which doubles back) this might be a necessary case
 		
 		const idx_overlap = s_xs_tree.find(s_overlap).index;
 		const idx_adjs = [[idx_overlap - 1, Math.ceil(s_overlap) - 1], [idx_overlap + 1, Math.floor(s_overlap)]]; // second ele of tuple deals with integer s_overlap to choose the relevant heading

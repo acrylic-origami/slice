@@ -10,15 +10,15 @@ import {lines_intersect, s2p, angle_score, split, point_in_poly, wrap_slice} fro
 import {EPS, DELTA, DIRS} from './consts';
 
 function onload_resize() {
-	const pixel_ratio = window.devicePixelRatio || 1.0;
-	document.getElementById('overlay').width = window.innerWidth * pixel_ratio;
-	document.getElementById('overlay').height = window.innerHeight * pixel_ratio;
+	// const pixel_ratio = window.devicePixelRatio || 1.0;
+	// document.getElementById('overlay').width = window.innerWidth * pixel_ratio;
+	// document.getElementById('overlay').height = window.innerHeight * pixel_ratio;
 }
 
 window.addEventListener('load', e => {
 	onload_resize();
-	const canvas = document.getElementById('overlay');
-	const ctx = canvas.getContext('2d');
+	// const canvas = document.getElementById('overlay');
+	// const ctx = canvas.getContext('2d');
 	
 	/////////////////
 	// INIT MATTER //
@@ -35,9 +35,9 @@ window.addEventListener('load', e => {
 			{x: -120, y: 120 }
 		]
 	];
-	const starting_bodies = starting_polys.map(poly => [Bodies.fromVertices(500, 0, poly), poly]);
+	const starting_bodies = starting_polys.map(poly => [Bodies.fromVertices(500, 200, poly), poly]);
 	for(const [body, _] of starting_bodies) {
-		Body.setStatic(body, false);
+		Body.setStatic(body, true);
 		World.addBody(engine.world, body);
 	}
 	// Body.setVelocity(original, {x: 2, y: -20});
