@@ -1,9 +1,10 @@
 {
-  "dependencies": {
-    "es6-shim": "^0.35.4",
-    "functional-red-black-tree": "^1.0.1",
-    "matter-js": "^0.14.2",
-    "simplify-js": "^1.2.3",
-    "sylvester": "0.0.21"
-  }
+	"name": "slice",
+	"dependencies": {
+		"es6-shim": "^0.35.4",
+		"functional-red-black-tree": "^1.0.1",
+		"matter-js": "^0.14.2",
+		"simplify-js": "^1.2.3",
+		"sylvester": "0.0.21"
+	}
 }
